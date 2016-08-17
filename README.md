@@ -11,7 +11,10 @@
 bower install
 ```
 没有安装bower的建议安装bower
+命令如下
+
 >npm install -g bower
+
 然后
 ```
 npm install
