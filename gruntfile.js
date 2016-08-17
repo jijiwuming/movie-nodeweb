@@ -10,7 +10,7 @@ module.exports = function(grunt) {
       },
       js: {
         files: ['public/js/**', 'models/**/*.js', 'schemas/**/*.js'],
-        //tasks: ['jshint'],
+        tasks: ['jshint'],
         options: {
           livereload: true
         }
@@ -32,11 +32,11 @@ module.exports = function(grunt) {
     },
 
     jshint: {
-      // options: {
-      //   jshintrc: '.jshintrc',
-      //   ignores: ['public/libs/**/*.js']
-      // },
-      // all: ['public/js/*.js', 'test/**/*.js', 'app/**/*.js']
+      options: {
+        jshintrc: '.jshintrc',
+        ignores: ['public/libs/**/*.js']
+      },
+      all: ['public/js/*.js', 'test/**/*.js', 'app/**/*.js']
     },
 
     less: {
@@ -47,7 +47,7 @@ module.exports = function(grunt) {
           optimization: 2
         },
         files: {
-          // 'public/build/index.css': 'public/less/index.less'
+          'public/build/index.css': 'public/less/index.less'
         }
       }
     },
@@ -55,10 +55,10 @@ module.exports = function(grunt) {
     uglify: {
       development: {
         files: {
-          // 'public/build/admin.min.js': 'public/js/admin.js',
-          // 'public/build/detail.min.js': [
-          //   'public/js/detail.js'
-          // ]
+          'public/build/admin.min.js': 'public/js/admain.js',
+          'public/build/detail.min.js': [
+            'public/js/detail.js'
+          ]
         }
       }
     },
@@ -82,10 +82,10 @@ module.exports = function(grunt) {
     },
 
     mochaTest: {
-      // options: {
-      //   reporter: 'spec'
-      // },
-      // src: ['test/**/*.js']
+      options:{
+        reporter:'spec'
+      },
+      src:['test/**/*.js']
     },
 
     concurrent: {

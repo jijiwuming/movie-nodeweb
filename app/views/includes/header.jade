@@ -15,9 +15,16 @@
 .navbar.navbar-default.navbar-relative-top
 .container
 	.row
-		.page-header
+		.page-header.clearfix
 			h1= title
-			small 重度萝莉控
+			.col-md-4
+				small 重度萝莉控
+			.col-md-8
+				form(method='GET',action='/result')
+					.input-group.col-sm-4.pull-right
+						input.form-control(type="text",name="q")
+						span.input-group-btn
+							button.btn.btn-default(type="submit") 搜索
 #signupModal.modal.fade
 	.modal-dialog
 		.modal-content

@@ -3,7 +3,8 @@ var User = require('../app/controllers/user');
 var Movie = require('../app/controllers/movie');
 var Comment= require('../app/controllers/comment');
 var Catetory= require('../app/controllers/catetory');
-
+var multiparty = require('connect-multiparty');
+var multipartyMiddleware = multiparty();
 module.exports = function(app){
 			//pre
 			app.use(function(req,res,next) {
@@ -30,7 +31,7 @@ module.exports = function(app){
 			app.get('/movie/:id', Movie.detail);
 			app.get('/admin/movie/new',User.signinRequired,User.adminRequired, Movie.admain);
 			app.get('/admin/movie/update/:id',User.signinRequired, User.adminRequired, Movie.update);
-			app.post('/admin/movie/new', User.signinRequired, User.adminRequired, Movie.new);
+			app.post('/admin/movie/new',multipartyMiddleware, User.signinRequired, User.adminRequired, Movie.savePoster,Movie.new);
 			app.get('/admin/movie/list',User.signinRequired,User.adminRequired, Movie.list);
 			app.delete('/admin/movie/list', User.signinRequired,User.adminRequired,Movie.del);
 
@@ -42,4 +43,7 @@ module.exports = function(app){
 			app.post('/admin/catetory', User.signinRequired, User.adminRequired, Catetory.save);
 			app.get('/admin/catetory/list',User.signinRequired,User.adminRequired, Catetory.list);
 			
+			//results
+			app.get('/result', Index.search);
+
 }

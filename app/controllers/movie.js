@@ -2,12 +2,18 @@ var _ = require('underscore');
 var Movie = require('../models/movie');
 var Comment = require('../models/comment');
 var Catetory = require('../models/catetory');
-
+var fs = require('fs');
+var path = require('path');
 
 //detail page
 exports.detail = function(req,res){
 	var id = req.params.id;
 
+	Movie.update({_id:id},{$inc:{pv:1}},function(err) {
+		if(err){
+			console.log(err);
+		}
+	})
 	Movie.findById(id,function(err,movie) {
 		if(err){
 			console.log(err);
@@ -69,13 +75,37 @@ exports.update = function(req,res) {
 	}
 }
 
+//admin poster
+exports.savePoster=function(req,res,next) {
+	var posterData = req.files.uploadPoster;
+	var filePath = posterData.path;
+	var originalFilename = posterData.originalFilename;
+	console.dir(req.files);
+	if(originalFilename){
+		fs.readFile(filePath, function(err,data) {
+			var timestamp = Date.now();
+			var type = posterData.type.split('/')[1];
+			var poster = timestamp + '.' + type;
+			var newPath = path.join(__dirname, '../../','/public/upload/'+poster);
+			fs.writeFile(newPath, data,function(err) {
+				req.poster = poster;
+				next();
+			})
+		})
+	}else{
+		next();
+	}
+}
 
 //admin post movie
 exports.new = function(req,res) {
 	var id = req.body.movie._id;
 	var movieObj = req.body.movie;
 	var _movie;
-	if(movieObj.page=='')movieObj.page=1;
+	if(req.poster){
+		movieObj.poster = req.poster;
+	}
+	if(movieObj.page==='')movieObj.page=1;
 	if(id){
 		Movie.findById(id, function(err,movie) {
 			if (err) {
@@ -92,17 +122,31 @@ exports.new = function(req,res) {
 	}
 	else{
 		_movie = new Movie(movieObj);
-		var catetoryId = _movie.catetory;
+		var catetoryId = movieObj.catetory;
+		var catetoryName = movieObj.catetoryName;
 		_movie.save(function(err,movie) {
 				if(err){
 					console.log(err);
 				}
-				Catetory.findById(catetoryId,function(err,catetory) {
-					catetory.movies.push(_movie._id);
-					catetory.save(function(err,catetory) {
-						res.redirect('/movie/'+ movie._id);						
+				if(catetoryId){					
+					Catetory.findById(catetoryId,function(err,catetory) {
+						catetory.movies.push(_movie._id);
+						catetory.save(function(err,catetory) {
+							res.redirect('/movie/'+ movie._id);						
+						})
 					})
-				})
+				}else if(catetoryName){
+					var catetory = new Catetory({
+						name:catetoryName,
+						movies:[_movie._id]
+					});
+					catetory.save(function(err,catetory) {
+						movie.catetory = catetory._id;
+						movie.save(function(err,movie) {
+							res.redirect('/movie/'+ movie._id);								
+						})
+					})
+				}
 		})
 	}
 }

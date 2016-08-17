@@ -14,7 +14,7 @@ exports.signup = function(req,res) {
 		}
 		else{		
 		// console.log('signup'+_user.name);	
-			var user = new User(_user);
+			user = new User(_user);
 			user.save(function(err,user) {
 				if(err){
 					console.log(err);

@@ -1,0 +1,16 @@
+.gitignore
+.DS_Store
+*/.DS_Store
+/public/libs/
+/node_modules/
+/bower_components/
+*.zip
+*.rar
+*.via
+*.tmp
+*.err
+*.jpg
+*.jpeg
+*.png
+*.min.js
+*.min.css
