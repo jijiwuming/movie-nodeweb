@@ -2,6 +2,7 @@
 .DS_Store
 */.DS_Store
 /public/libs/
+/public/build/
 /node_modules/
 /bower_components/
 *.zip
@@ -9,8 +10,6 @@
 *.via
 *.tmp
 *.err
-*.jpg
-*.jpeg
-*.png
+*.log
 *.min.js
 *.min.css
